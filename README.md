@@ -2,7 +2,8 @@
 
 > **Autonomous Self-Healing Edge Agent Framework Using Contextual RAG and Model-Switching**  
 > *Grounded in Edge General Intelligence (EGI) Frameworks & Agentification Concepts*
-> **Live Model: https://aetherself.onrender.com/**
+
+**Live Model: https://aetherself.onrender.com/**
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](LICENSE)
