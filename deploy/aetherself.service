@@ -1,0 +1,30 @@
+[Unit]
+Description=AetherSelf Autonomous Self-Healing Edge Agent Middleware Daemon
+After=network.target local-fs.target
+Documentation=https://github.com/aetherself/aetherself
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/aetherself
+ExecStart=/opt/aetherself/venv/bin/python -m aetherself.cli start --host 0.0.0.0 --port 8765
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# Hardware Resource Isolation & Guardrails (PDF Spec: Memory Footprint < 2.5 GB)
+MemoryAccounting=true
+MemoryHigh=1800M
+MemoryMax=2500M
+CPUAccounting=true
+CPUQuota=85%
+
+# Privilege Isolation & Sandboxing
+ProtectSystem=full
+ProtectHome=true
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

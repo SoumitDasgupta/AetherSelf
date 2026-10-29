@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  aetherself-daemon:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    container_name: aetherself-edge-daemon
+    restart: unless-stopped
+    ports:
+      - "8765:8765"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - AETHERSELF_PORT=8765
+    volumes:
+      - aetherself-data:/root/.aetherself
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2000M
+        reservations:
+          cpus: "0.5"
+          memory: 500M
+
+volumes:
+  aetherself-data:

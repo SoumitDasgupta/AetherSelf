@@ -1,0 +1,1 @@
+"""AetherSelf automated test suite."""

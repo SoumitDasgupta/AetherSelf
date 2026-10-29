@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AetherSelf • Autonomous Self-Healing Edge Agent Framework</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="dark-theme">
+  <!-- Cyber Background Gradients -->
+  <div class="glow-bg glow-primary"></div>
+  <div class="glow-bg glow-secondary"></div>
+
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="pulse-indicator pulse-active" id="connection-pulse"></div>
+      <div class="brand-text">
+        <h1>AETHER<span class="gradient-text">SELF</span></h1>
+        <span class="sub-brand">EDGE GENERAL INTELLIGENCE AGENTIC MIDDLEWARE</span>
+      </div>
+    </div>
+    <div class="nav-status">
+      <div class="node-pill">
+        <span class="pill-label">EDGE NODE:</span>
+        <span class="pill-value" id="node-type">RPi 5 / Jetson Nano (Local)</span>
+      </div>
+      <div class="node-pill state-pill" id="global-state-pill">
+        <span class="pill-label">STATE:</span>
+        <span class="pill-value" id="current-state-text">NORMAL</span>
+      </div>
+      <button class="btn btn-outline" id="btn-manual-sync">Sync Telemetry</button>
+    </div>
+  </header>
+
+  <!-- Executive Specification HUD -->
+  <section class="metrics-ribbon">
+    <div class="metric-card">
+      <span class="metric-title">AUTONOMOUS RECOVERY</span>
+      <div class="metric-value-row">
+        <span class="metric-number" id="metric-recovery-rate">94.2%</span>
+        <span class="metric-badge badge-success">Grounded</span>
+      </div>
+      <span class="metric-caption">Zero Human Operator In Loop</span>
+    </div>
+    <div class="metric-card">
+      <span class="metric-title">MEAN TIME TO HEAL (MTTH)</span>
+      <div class="metric-value-row">
+        <span class="metric-number" id="metric-mtth">< 3.2 s</span>
+        <span class="metric-badge badge-cyan">Sub-Second Sense</span>
+      </div>
+      <span class="metric-caption">End-to-End Perception to Action</span>
+    </div>
+    <div class="metric-card">
+      <span class="metric-title">MEMORY FOOTPRINT</span>
+      <div class="metric-value-row">
+        <span class="metric-number" id="metric-ram-footprint">1.8 GB</span>
+        <span class="metric-badge badge-warning">2.5 GB Cap</span>
+      </div>
+      <span class="metric-caption">Fits SBCs & Embedded Edge Devices</span>
+    </div>
+    <div class="metric-card">
+      <span class="metric-title">OFFLINE AUTONOMY</span>
+      <div class="metric-value-row">
+        <span class="metric-number" id="metric-offline">100%</span>
+        <span class="metric-badge badge-purple">Zero Cloud</span>
+      </div>
+      <span class="metric-caption">Local Vector RAG & On-Device SLM</span>
+    </div>
+  </section>
+
+  <!-- Main Dashboard Layout -->
+  <main class="dashboard-grid">
+
+    <!-- Column 1: Perception Probe & Isolation Forest -->
+    <section class="card perception-panel">
+      <div class="card-header">
+        <div class="card-title-group">
+          <span class="card-icon">📡</span>
+          <h3>Perception Layer • 500ms Telemetry Probe</h3>
+        </div>
+        <span class="tag tag-live" id="sampling-tag">SAMPLING 2 Hz</span>
+      </div>
+      <div class="card-body">
+        <div class="gauge-grid">
+          <div class="gauge-item">
+            <div class="gauge-header">
+              <span>CPU Utilization</span>
+              <span class="gauge-val" id="val-cpu">0%</span>
+            </div>
+            <div class="progress-track"><div class="progress-bar bar-cpu" id="bar-cpu"></div></div>
+          </div>
+          <div class="gauge-item">
+            <div class="gauge-header">
+              <span>Memory Footprint</span>
+              <span class="gauge-val" id="val-mem">0% (0 MB)</span>
+            </div>
+            <div class="progress-track"><div class="progress-bar bar-mem" id="bar-mem"></div></div>
+          </div>
+          <div class="gauge-item">
+            <div class="gauge-header">
+              <span>IPC Latency</span>
+              <span class="gauge-val" id="val-ipc">0 ms</span>
+            </div>
+            <div class="progress-track"><div class="progress-bar bar-ipc" id="bar-ipc"></div></div>
+          </div>
+          <div class="gauge-item">
+            <div class="gauge-header">
+              <span>Queue Backlog</span>
+              <span class="gauge-val" id="val-queue">0 msgs</span>
+            </div>
+            <div class="progress-track"><div class="progress-bar bar-queue" id="bar-queue"></div></div>
+          </div>
+          <div class="gauge-item">
+            <div class="gauge-header">
+              <span>Error Log Frequency</span>
+              <span class="gauge-val" id="val-errors">0 err/s</span>
+            </div>
+            <div class="progress-track"><div class="progress-bar bar-errors" id="bar-errors"></div></div>
+          </div>
+          <div class="gauge-item">
+            <div class="gauge-header">
+              <span>Open File Handles</span>
+              <span class="gauge-val" id="val-handles">0 handles</span>
+            </div>
+            <div class="progress-track"><div class="progress-bar bar-handles" id="bar-handles"></div></div>
+          </div>
+        </div>
+
+        <div class="anomaly-meter-box">
+          <div class="anomaly-meter-header">
+            <span class="bold">Isolation Forest Anomaly Score:</span>
+            <span class="anomaly-score-text" id="anomaly-score-text">0.05 (Nominal)</span>
+          </div>
+          <div class="anomaly-track">
+            <div class="anomaly-threshold-marker" style="left: 65%;">
+              <span class="threshold-label">Threshold 0.65</span>
+            </div>
+            <div class="anomaly-fill" id="anomaly-fill"></div>
+          </div>
+          <div class="anomaly-variances" id="anomaly-variances">All system variances nominal.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Column 2: Dynamic Model-Switching & State Machine -->
+    <section class="card reasoning-panel">
+      <div class="card-header">
+        <div class="card-title-group">
+          <span class="card-icon">🧠</span>
+          <h3>Agentic SLM Core • Dynamic Model-Switching</h3>
+        </div>
+        <span class="tag tag-model" id="active-model-tag">TIER 1 (1B ROUTINE)</span>
+      </div>
+      <div class="card-body">
+        <!-- Model Switching Deck -->
+        <div class="model-switch-container" id="model-switch-deck">
+          <div class="model-tier-box tier-1 active" id="tier-1-box">
+            <div class="tier-status-indicator"></div>
+            <div class="tier-content">
+              <h4>Tier 1: 1B Parameter Routine Classifier</h4>
+              <p>Low-power routine log triage & nominal state classification</p>
+              <div class="tier-specs">
+                <span>Power: ~2.2 W</span>
+                <span>RAM: &lt; 500 MB</span>
+                <span>Latency: &lt; 0.1 s</span>
+              </div>
+            </div>
+          </div>
+          <div class="switch-arrow">⇄</div>
+          <div class="model-tier-box tier-2" id="tier-2-box">
+            <div class="tier-status-indicator"></div>
+            <div class="tier-content">
+              <h4>Tier 2: 3.8B Diagnostic SLM (Phi-3.5 CoT)</h4>
+              <p>High-capacity root-cause deduction & action plan synthesis</p>
+              <div class="tier-specs">
+                <span>Power: ~7.5 W</span>
+                <span>RAM: ~1.8 GB</span>
+                <span>Latency: &lt; 2.5 s</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- State Machine Flowchart -->
+        <div class="state-machine-box">
+          <span class="faint-title">DETERMINISTIC AGENTIC STATE TRANSITIONS</span>
+          <div class="state-nodes-row">
+            <div class="state-node active" id="node-NORMAL">NORMAL</div>
+            <div class="state-edge">→</div>
+            <div class="state-node" id="node-RESOLUTION_REQUIRED">ANOMALY</div>
+            <div class="state-edge">→</div>
+            <div class="state-node" id="node-RAG_RETRIEVAL">RAG SEARCH</div>
+            <div class="state-edge">→</div>
+            <div class="state-node" id="node-SLM_REASONING">CoT REASON</div>
+            <div class="state-edge">→</div>
+            <div class="state-node" id="node-SANDBOX_EXECUTION">EXECUTE</div>
+            <div class="state-edge">→</div>
+            <div class="state-node" id="node-VALIDATING">VALIDATE</div>
+            <div class="state-edge">→</div>
+            <div class="state-node" id="node-RESOLVED_CLOSED_LOOP">RESOLVED</div>
+          </div>
+        </div>
+
+        <!-- Chain of Thought Stream -->
+        <div class="cot-terminal-box">
+          <div class="terminal-bar">
+            <span>CHAIN-OF-THOUGHT DIAGNOSTIC STREAM (Wei et al. 2022)</span>
+            <span class="terminal-dots">● ● ●</span>
+          </div>
+          <div class="cot-logs" id="cot-logs">
+            <div class="cot-line dim">[00:00.00] System operational state NOMINAL. Tier 1 model standing by...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Column 3: Contextual RAG Memory & Action Plan -->
+    <section class="card rag-panel">
+      <div class="card-header">
+        <div class="card-title-group">
+          <span class="card-icon">🗄️</span>
+          <h3>Contextual Vector RAG • Freshness Decay</h3>
+        </div>
+        <span class="tag tag-rag" id="rag-items-tag">6 STORED TRACES</span>
+      </div>
+      <div class="card-body">
+        <div class="rag-search-box">
+          <input type="text" id="rag-query-input" placeholder="Query historical memory (e.g. memory leak, deadlock)..." class="input-text">
+          <button class="btn btn-primary" id="btn-rag-query">Search RAG</button>
+        </div>
+        <div class="rag-results-container" id="rag-results-list">
+          <div class="rag-card placeholder-card">
+            <span>No active anomaly query. Waiting for perception trigger or manual search...</span>
+          </div>
+        </div>
+
+        <!-- Synthesized Action Plan Card -->
+        <div class="action-plan-container">
+          <span class="faint-title">PYDANTIC ACTION PLAN & SAFETY PRIMITIVE</span>
+          <div class="plan-card" id="plan-card">
+            <div class="plan-empty">Action plan idle. Safety guardrails standing by.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Full Width: Chaos Engineering Deck & Edge Microservice Cluster -->
+    <section class="card chaos-panel full-width">
+      <div class="card-header">
+        <div class="card-title-group">
+          <span class="card-icon">⚡</span>
+          <h3>Chaos Engineering & Autonomous Self-Healing Validation Deck</h3>
+        </div>
+        <span class="tag tag-chaos">1-CLICK FAULT INJECTION</span>
+      </div>
+      <div class="card-body">
+        <div class="chaos-buttons-grid">
+          <button class="btn-chaos" data-fault="memory_leak">
+            <span class="btn-icon">🌊</span>
+            <div class="btn-text">
+              <span class="btn-name">Memory Leak Spike</span>
+              <span class="btn-sub">Payment Gateway (+680MB)</span>
+            </div>
+          </button>
+          <button class="btn-chaos" data-fault="lockfile_deadlock">
+            <span class="btn-icon">🔒</span>
+            <div class="btn-text">
+              <span class="btn-name">Stale Lockfile Deadlock</span>
+              <span class="btn-sub">IoT Broker (320ms Latency)</span>
+            </div>
+          </button>
+          <button class="btn-chaos" data-fault="thread_starvation">
+            <span class="btn-icon">🔥</span>
+            <div class="btn-text">
+              <span class="btn-name">Thread Pool Starvation</span>
+              <span class="btn-sub">Inference Worker (95% CPU)</span>
+            </div>
+          </button>
+          <button class="btn-chaos" data-fault="cache_corruption">
+            <span class="btn-icon">💥</span>
+            <div class="btn-text">
+              <span class="btn-name">Cache Poison Cascade</span>
+              <span class="btn-sub">Cache Sync (16 err/sec)</span>
+            </div>
+          </button>
+          <button class="btn-chaos" data-fault="queue_overflow">
+            <span class="btn-icon">📥</span>
+            <div class="btn-text">
+              <span class="btn-name">Poison Queue Overflow</span>
+              <span class="btn-sub">Cache Sync (100+ Backlog)</span>
+            </div>
+          </button>
+          <button class="btn-chaos" data-fault="zombie_leak">
+            <span class="btn-icon">🧟</span>
+            <div class="btn-text">
+              <span class="btn-name">Zombie Process Leak</span>
+              <span class="btn-sub">Device Registry (180 Handles)</span>
+            </div>
+          </button>
+          <button class="btn-chaos btn-rollback" data-fault="unresolvable_fault">
+            <span class="btn-icon">🛡️</span>
+            <div class="btn-text">
+              <span class="btn-name">Verify Atomic Rollback</span>
+              <span class="btn-sub">Simulate Check Failure</span>
+            </div>
+          </button>
+          <button class="btn-chaos btn-clear" id="btn-clear-faults">
+            <span class="btn-icon">🔄</span>
+            <div class="btn-text">
+              <span class="btn-name">Normalize Cluster</span>
+              <span class="btn-sub">Reset All Services</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Microservice Cluster Status Cards -->
+        <div class="cluster-grid" id="cluster-grid">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Incident History Ledger -->
+        <div class="ledger-box">
+          <span class="faint-title">CLOSED-LOOP VECTOR INCIDENT LEDGER (AUTONOMOUSLY INDEXED MEMORY)</span>
+          <div class="table-container">
+            <table class="ledger-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Target Microservice</th>
+                  <th>Pre-approved Action</th>
+                  <th>Healing Time (MTTH)</th>
+                  <th>Root Cause Deduction</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="ledger-body">
+                <tr>
+                  <td colspan="6" class="center-text dim">No autonomous self-healing events yet. Inject a fault above to observe agentic resolution!</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span>AetherSelf • Autonomous Self-Healing Edge Agent Framework</span>
+    <span>IEEE Network / ArXiv Literature • Chen et al. (2026), Lewis et al. (2020), Wei et al. (2022)</span>
+    <span>Zero-Cloud Edge Middleware • 100% Offline Autonomy</span>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
